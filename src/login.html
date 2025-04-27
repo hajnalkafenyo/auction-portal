@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <!--<link rel="icon" type="image/svg+xml" href="/favicon.svg" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BookBid | Login</title>
+    <link href="/css/index.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen md:m-16 m-1">
+    <div class="bg-white border-solid rounded-md border-2 border-gray-200 shadow p-4 w-full max-w-[400px]">
+        <h1 class="header-1 flex items-center justify-center">Login</h1>
+        <form id="form">
+            <div class="mb-4 inputfield">
+                <label class="">Email</label>
+                <input type="email" name="email" id="email" required placeholder="sample@noroff.no" />
+                <span id="email-error" class="bg-red-600"></span>
+                <span>You should use @noroff.no email address</span>
+            </div>
+            <div class="mb-6 inputfield">
+                <label>Password</label>
+                <input type="password" name="password" id="password" required placeholder="********" />
+            </div>
+            <button type="submit" class="w-full button-primary">
+                Sign In
+            </button>
+        </form>
+        <p class="m-1.5 flex items-center justify-center">Don't have an account? <a class="font-medium"
+                href="register.html">Register</a></p>
+    </div>
+    <script src="js/login.js"></script>
+</body>
+
+</html>

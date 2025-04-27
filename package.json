@@ -1,0 +1,25 @@
+{
+  "name": "auction",
+  "version": "1.0.0",
+  "description": "Semester project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tailwind-watch": "npx tailwindcss -i ./src/css/index.css -o ./dist/css/index.css --watch",
+    "server": "node ./server.js",
+    "copy-watch": "nodemon --watch \"src/images\" --ext \"png,jpg,jpeg,svg\" --exec \"node ./copy.js",
+    "build-tw": "npx tailwindcss -i ./src/css/index.css -o ./dist/css/index.css --minify",
+    "build": "node ./build.js && npm run build-tw",
+    "dev": "concurrently \"npm run server\" \"npm run tailwind-watch\" \"npm run copy-watch\""
+  },
+  "author": "Hajnalka Zsobrakne Fenyo",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
+    "live-server": "^1.2.2",
+    "nodemon": "^3.1.10",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
+  }
+}

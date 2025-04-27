@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookBid | New listing</title>
+    <link href="/css/index.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+</head>
+
+<body class="bg-gray-100">
+    <nav id="header" class="flex flex-row w-full justify-center p-2 bg-white border">
+        <div class="flex flex-row justify-between max-w-[1024px] w-full items-center">
+            <a href="/" class="flex flex-row gap-8 h-fit">
+                <img src="/images/logo.png" alt="BookBid Logo" style="height: 24px; width: 24px">
+                <span class="font-bold text-primary">BookBid</span>
+            </a>
+            <div class="flex flex-row gap-4">
+                <button type="button" class="button-primary px-2">New Listing</button>
+                <div class="bg-secondary p-2 pt-2 rounded-lg text-primary font-medium">$</div>
+                <img src="/images/loading.svg" id="loading" style="height: 24px; width: 24px">
+                <div id="headerUser" class="text-primary items-center hidden">Jane Bookhandel</div>
+            </div>
+        </div>
+    </nav>
+    <div class="container max-w-[1024px] mx-auto w-full">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb flex flex-row mb-2">
+                <li class="breadcrumb-item"><a href="/">Home</a>>></li>
+                <li class="breadcrumb-item active font-medium" aria-current="page"><a href="new_listing.html">New
+                        listing</a></li>
+            </ol>
+        </nav>
+        <main>
+            <div class="flex flex-col gap-2 md:m-16 m-1">
+                <h1 class="header-1">
+                    Create New Listing
+                </h1>
+                <form id="listingArea" class="flex flex-col gap-2">
+                    <div class="box p-4">
+                        <div>
+                            <h2 class="font-bold text-primary">Basic information</h2>
+                        </div>
+                        <div class="mb-4 inputfield">
+                            <label class="text-primary">Title</label>
+                            <input type="text" name="title" id="title" required
+                                placeholder="e.g., First Edition Signed Harry Potter" />
+                            <span>Create a clear, descriptive title for your listing (100 characters max)</span>
+                        </div>
+                        <div class="mb-4 inputfield">
+                            <label class="text-primary">Description</label>
+                            <textarea type="text" class="box" name="description" id="description" required
+                                placeholder="Describe your item in detail. Include informaton about condition, edition, signatures, etc"></textarea>
+                            <span>Provide a detailed description of your item to attract potential bidders</span>
+                        </div>
+                        <div class="mb-4 inputfield">
+                            <label class="text-primary">Tags</label>
+                            <input type="text" name="tags" id="tags" required
+                                placeholder="e.g., First Edition, Signed, Fantasy, 1997" />
+                            <span>Add tags separated by commas to help buyers find your listing</span>
+                        </div>
+                    </div>
+                    <div class="box p-4">
+                        <div>
+                            <h2 class="font-bold text-primary">Auction details</h2>
+                        </div>
+                        <div class="mb-4 inputfield">
+                            <label class="text-primary">Auction End Date</label>
+                            <div class="flex flex-row justify-between">
+                                <input type="date" name="date" id="date" required placeholder="dd/mm/yyyy" />
+                                <input type="time" name="time" id="time" required placeholder="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box p-4">
+                        <div>
+                            <h2 class="font-bold text-primary">Images</h2>
+                        </div>
+                        <div class="flex flex-col mb-4 inputfield">
+                            <label for="listingFile" class="form-label">File</label>
+                            <input class="box" type="url" id="listingFile" placeholder="Leave a picture here" />
+                        </div>
+                        <div>
+                            <button class="button-primary p-4">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <div class="bg-white grid md:grid-cols-3 w-full px-4 py-8">
+            <div>
+                <a href="/" class="flex flex-row gap-8 h-fit">
+                    <img src="/images/logo.png" alt="BookBid Logo" style="height: 24px; width: 24px">
+                    <span class="font-bold text-primary">BookBid</span></a>
+                <p class="text-gray-400">BookBid is the premier auction platform for bibliophiles, connecting book
+                    lovers with rare and
+                    valuable literary treasures from around the world.</p>
+                <span class="flex flex-row">
+                    <img src="/images/fb.png" alt="socialmedia icon">
+                    <img src="/images/insta.png" alt="socialmedia icon">
+                    <img src="/images/twitter.png" alt="socialmedia icon">
+                </span>
+            </div>
+            <div>
+                <p>Quick Links</p>
+                <p>Home</p>
+                <p>Browse Auctions</p>
+                <p>How It Works</p>
+                <p>Seller Guidelines</p>
+                <p>Buyer Guidelines</p>
+            </div>
+            <div>
+                <p>Support</p>
+                <p>FaQ</p>
+                <p>Contact Us</p>
+                <p>Privacy Policy</p>
+                <p>Terms & Conditions</p>
+                <p>Cookie Policy</p>
+            </div>
+        </div>
+        <script src="js/api.js"></script>
+        <script src="js/header.js"></script>
+        <script src="js/new_listing.js"></script>
+</body>
+
+</html>

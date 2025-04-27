@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookBid | Listings</title>
+    <link href="/css/index.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+</head>
+
+<body class="bg-gray-100">
+    <div class="fixed bottom-2 right-2 z-10">
+        <a href="new_listing.html" type="button"
+            class="bg-primary w-10 h-10 border text-white rounded-full flex justify-center items-center">+</a>
+    </div>
+    <nav id="header" class="flex flex-row w-full justify-center p-2 bg-white border">
+
+    </nav>
+    <div class="container max-w-[1024px] mx-auto w-full">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item font-medium mb-4"><a href="/">Home</a></li>
+            </ol>
+        </nav>
+        <main>
+            <div class="flex items-end gap-3 mb-3">
+                <div class="inputfield grow">
+                    <label class="text-lg">Search</label>
+                    <input type="text" id="search-input" />
+                    <span>Search by title or description</span>
+                </div>
+            </div>
+            <div>
+                <label class="flex gap-2 text-sm items-center justify-start">
+                    <input type="checkbox" value="false" class="peer hidden" id="active-toggle" />
+                    <div class="w-12 h-6.5 p-0.5 bg-white peer-checked:bg-gray-50 transition-all rounded-full border border-primary shadow-sm flex justify-start peer-checked:pl-6"
+                        tabindex="0" role="checkbox">
+                        <div class="w-5 h-5 bg-primary border-primary/90 border rounded-full shadow-sm">
+                        </div>
+                    </div>
+                    Show active listings only
+                </label>
+            </div>
+            <div id="listing-container" class="grid-cols-12 w-fit gap-1">
+
+            </div>
+            <div class="flex justify-center mb-4">
+                <p class="bg-white border p-2 pt-2 rounded-lg text-primary">View all Listings</p>
+            </div>
+        </main>
+        <div class="bg-white grid md:grid-cols-3 w-full px-4 py-8">
+            <div>
+                <a href="/" class="flex flex-row gap-8 h-fit">
+                    <img src="/images/logo.png" alt="BookBid Logo" style="height: 24px; width: 24px">
+                    <span class="font-bold text-primary">BookBid</span></a>
+                <p class="text-gray-400">BookBid is the premier auction platform for bibliophiles, connecting book
+                    lovers with rare and
+                    valuable literary treasures from around the world.</p>
+                <span class="flex flex-row">
+                    <img src="/images/fb.png" alt="socialmedia icon">
+                    <img src="/images/insta.png" alt="socialmedia icon">
+                    <img src="/images/twitter.png" alt="socialmedia icon">
+                </span>
+            </div>
+            <div>
+                <p>Quick Links</p>
+                <p>Home</p>
+                <p>Browse Auctions</p>
+                <p>How It Works</p>
+                <p>Seller Guidelines</p>
+                <p>Buyer Guidelines</p>
+            </div>
+            <div>
+                <p>Support</p>
+                <p>FaQ</p>
+                <p>Contact Us</p>
+                <p>Privacy Policy</p>
+                <p>Terms & Conditions</p>
+                <p>Cookie Policy</p>
+            </div>
+        </div>
+        <script src="js/api.js"></script>
+        <script src="js/header.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/listingCard.js"></script>
+        <script src="js/listings.js"></script>
+</body>
+
+</html>

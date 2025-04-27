@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <!--<link rel="icon" type="image/svg+xml" href="/favicon.svg" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BookBid | Register</title>
+    <link href="/css/index.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen md:m-16 m-1">
+    <div class="bg-white border-solid rounded-md border-2 border-gray-200 shadow p-4 w-full max-w-[400px]">
+        <h1 class="header-1 flex items-center justify-center">Register</h1>
+        <form id="emailform">
+            <div class="mb-4 inputfield">
+                <label class="">Name</label>
+                <input type="text" name="name" id="name" required placeholder="Your Name" />
+            </div>
+            <div class="mb-4 inputfield">
+                <label class="">Email</label>
+                <input type="email" name="email" id="email" required placeholder="you@example.com" />
+                <span id="email-error" class="bg-red-500 text-red-200"></span>
+                <span>You should use @noroff.no email address</span>
+            </div>
+            <div class="mb-6 inputfield">
+                <label>Password</label>
+                <input type="password" name="password" id="password" pattern=".{8,}" required placeholder="********" />
+                <span id="password-help-text">Minimum 8 characters.
+                </span>
+            </div>
+
+            <div class="mb-6 inputfield">
+                <label>Repeat Password</label>
+                <input type="password" name="repeat-password" id="repeat-password" pattern=".{8,}" required
+                    placeholder="********" />
+                <span class="form-text" id="password2-help-text">Same password.
+                </span>
+            </div>
+            <button type="submit" class="w-full button-primary">
+                Register
+            </button>
+        </form>
+        <p class="m-1.5 flex items-center justify-center">Do you have an account? <a class="font-medium"
+                href="login.html">Log in</a></p>
+    </div>
+    <script src="js/register.js"></script>
+</body>
+
+</html>
