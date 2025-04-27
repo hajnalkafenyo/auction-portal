@@ -2,20 +2,24 @@
 const fs = require('fs');
 const path = require('path');
 
-function copyFiles(srcDir, distDir) {
-    const imagesDir = path.join(distDir, 'images');
-    if (!fs.existsSync(imagesDir)) {
-        fs.mkdirSync(imagesDir, { recursive: true });
-        console.log('Created ./dist/images directory');
+function copyFiles(from, to) {
+    const distDir = path.resolve(__dirname, 'dist');
+    const srcDir = path.resolve(__dirname, 'src');
+
+    const toDir = path.join(distDir, to);
+    if (!fs.existsSync(toDir)) {
+        fs.mkdirSync(toDir, { recursive: true });
     }
-    // Copy all images from ./images to dist/images
-    const imagesSrcDir = path.resolve(srcDir, 'images');
-    const imagesFiles = fs.readdirSync(imagesSrcDir);
-    imagesFiles.forEach(file => {
-        const srcFile = path.join(imagesSrcDir, file);
-        const distFile = path.join(imagesDir, file);
+
+    const fromDir = path.resolve(srcDir, from);
+    const files = fs.readdirSync(fromDir, { recursive: false });
+    files.forEach(file => {
+        const srcFile = path.join(fromDir, file);
+        if (fs.lstatSync(srcFile).isDirectory()) {
+            return; // Skip directories
+        }
+        const distFile = path.join(toDir, file);
         fs.copyFileSync(srcFile, distFile);
-        console.log(`Copied ${file} to ./dist/images`);
     });
 }
 module.exports = { copyFiles };
