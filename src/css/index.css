@@ -3,20 +3,9 @@
 @tailwind utilities;
 
 :root {
-    --color-primary: #3c5b66;
-    --color-secondary: #FEF2B8;
+    
   }
-  .bg-primary { background-color: var(--color-primary); }
-  .text-primary { color: var(--color-primary); }
-  .border-primary { border-color: var(--color-primary); }
-  .bg-secondary { background-color: var(--color-secondary); }
-  .hover\:bg-primary\/5:hover { background-color: rgba(60, 91, 102, 0.05); }
-  .hover\:bg-primary\/90:hover { background-color: rgba(60, 91, 102, 0.9); }
-  .hover\:bg-secondary\/90:hover { background-color: rgba(254, 242, 184, 0.9); }
-  .hover\:text-secondary:hover { color: var(--color-secondary); }
-  .hover\:text-white:hover { color: white; }
-  .hover\:bg-primary:hover { background-color: var(--color-primary);
-  }
+
 
 .header-1 {
   @apply text-[2rem] font-bold text-primary;

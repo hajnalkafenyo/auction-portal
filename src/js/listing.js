@@ -19,6 +19,37 @@ async function fetchListing() {
             return false;
         }
     })
+
+    const setBidError = (message) => {
+        const bidErrorElement = document.getElementById('bidError');
+        const bidInputElement = document.getElementById('bidValue');
+        bidInputElement.invalid = true;
+        bidErrorElement.innerHTML = message;
+        bidErrorElement.classList.remove("hidden");
+    }
+
+    const clearBidError = () => {
+        const bidErrorElement = document.getElementById('bidError');
+        const bidInputElement = document.getElementById('bidValue');
+        bidInputElement.invalid = false;
+        bidErrorElement.innerHTML = "";
+        bidErrorElement.classList.add("hidden");
+    }
+
+    document.getElementById('bidValue').addEventListener("change", (e) => {
+        const bidValue = parseInt(e.target.value);
+        if (bidValue < maxBid) {
+            setBidError(`Bid must be higher than ${maxBid}`);
+            return false;
+        }
+
+        if (currentCredits > 0 && bidValue > currentCredits) {
+            setBidError(`You don't have enough credits`);
+            return false;
+        }
+        clearBidError();
+    })
+
 }
 
 function getBreadcrumb(body) {
@@ -45,27 +76,31 @@ function displayTags(tags) {
     }
     return s;
 }
-function tableRowContent(bids, isMax) {
+function tableRowContent(bids, isMax, isEnded) {
     const date = dateDifference(bids.created);
     let tableRowContentElement = ""
     if (isMax) {
-        tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-green-100 text-green-800">Current High Bid</div></td>`
+        if (isEnded) {
+            tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-yellow-100 text-yellow-800">Winner</div></td>`
+        } else {
+            tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-green-100 text-green-800">Current High Bid</div></td>`
+        }
     } else {
         tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-gray-100 text-gray-800">OutBid</div></td>`
     }
-    return `<tr class="border-b-2">
-                <td><a class="flex flex-row gap-2" href="profile.html?id=${bids.bidder.name}"><img src="${bids.bidder.avatar.url}" alt="${bids.bidder.avatar.alt}" class="w-8 h-8 rounded-full"><span class="md:inline hidden">${bids.bidder.name}</span></a></td>
+    return `<tr class="border-b-2 grid gap-4 grid-cols-2 py-2 md:table-row">
+                <td><a class="flex flex-row gap-2" href="profile.html?id=${bids.bidder.name}"><img src="${bids.bidder.avatar.url}" alt="${bids.bidder.avatar.alt}" class="w-8 h-8 rounded-full"><span class="inline">${bids.bidder.name}</span></a></td>
                 <td>💰${bids.amount}</td>
                 <td>${date}</td>
                 ${tableRowContentElement}
             </tr> `
 
 }
-function tableContent(bids) {
+function tableContent(bids, isEnded) {
     let s = "";
     for (let i = 0; i < bids.length; i++) {
         const element = bids[i];
-        const tableElement = tableRowContent(element, i === 0);
+        const tableElement = tableRowContent(element, i === 0, isEnded);
         s += tableElement
     }
     return s;
@@ -75,7 +110,8 @@ function tableContent(bids) {
 
 function listingContent(body) {
     let endsAtString = "";
-    if (new Date(body.endsAt) > new Date()) {
+    const isEnded = new Date(body.endsAt) < new Date();
+    if (!isEnded) {
         const date = dateDifferenceFuture(body.endsAt);
         endsAtString = `Auction ends ${date} `
     } else {
@@ -96,7 +132,7 @@ function listingContent(body) {
     const tags = displayTags(body.tags)
     const sortedBid = getSortedBid(body.bids);
     const maxBid = getMaxBid(body.bids);
-    const tableContentElement = tableContent(sortedBid);
+    const tableContentElement = tableContent(sortedBid, isEnded);
     const isBidActive = new Date(body.endsAt) > new Date();
     const userName = body.seller?.name;
     const isUserListingAuthor = userName === getUserFromLocalStorage().name;
@@ -143,12 +179,13 @@ function listingContent(body) {
                                 <div>
                                     <h2 class="text-primary font-medium">Your Bid (Higher than ${maxBid})</h2>
                                 </div>
-                                <div class=" flex flex-row p-2">
-                                    <input type="number" id="bidValue" min="${maxBid}" value="${maxBid + 1}" class="p-2 min-h-[72px] m-0">
+                                <div class=" flex flex-row p-2 group/inputfield">
+                                    <input type="number" id="bidValue" min="${maxBid}" value="${maxBid + 1}" class="p-2 min-h-[72px] m-0 invalid:border-red-500 group-hover/inputfield:invalid:border-red-400 border-2 rounded-s-lg peer">
                                     <button dir="rtl"
-                                        id="bidButton" class="button bg-primary rounded-s-lg py-2 font-bold hover:bg-primary/90; text-white w-32 min-h-[72px] m-0">Place
+                                        id="bidButton" class="button bg-primary peer-invalid:bg-red-500 group-hover/inputfield:peer-invalid:bg-red-400 group-hover/inputfield:bg-primary/90 rounded-s-lg py-2 font-bold text-white w-32 min-h-[72px] m-0">Place
                                         Bid</button>
                                 </div>
+                                <div id="bidError" class="hidden text-red-500 text-sm"></div>
                             </div>
                         </div>
                     </div>
@@ -168,17 +205,17 @@ function listingContent(body) {
             </div>
             <div class="box p-4 w-full">
                 <h2 class="text-primary font-medium">About this listing</h2>
-                <div>${body.description || ""}</div>
+                <div>${body.description || "<span class=\"italic\">No description provided</span>"}</div>
             </div>
             <div class="box p-4 mb-4 w-full">
                 <h1 class="header-1">Bid History</h1>
                 <table class="w-full">
-                    <thead class="font-thin">
-                        <tr>
-                            <th>Bidder</th>
-                            <th>Amount</th>
-                            <th>Date & Time</th>
-                            <th>Status</th>
+                    <thead class="font-thin hidden md:table-header-group">
+                        <tr class="hidden md:table-row">
+                            <th class="text-md text-gray-500 font-normal text-left">Bidder</th>
+                            <th class="text-md text-gray-500 font-normal text-left">Amount</th>
+                            <th class="text-md text-gray-500 font-normal text-left">Date & Time</th>
+                            <th class="text-md text-gray-500 font-normal text-left">Status</th>
                         </tr>
                     </thead>
                     <tbody>

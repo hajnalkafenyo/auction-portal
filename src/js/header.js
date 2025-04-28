@@ -4,6 +4,8 @@ function getUserFromLocalStorage() {
     return user;
 }
 
+let currentCredits = 0;
+
 async function getHeader() {
     const userFromLocalStorage = getUserFromLocalStorage()
     if (!userFromLocalStorage) {
@@ -11,6 +13,7 @@ async function getHeader() {
     }
     const userName = userFromLocalStorage.name;
     const profile = await getProfile(userName);
+    currentCredits = profile.credits;
     const headerElement = document.getElementById('header');
     headerHtml = headerContent(profile);
     headerElement.innerHTML = headerHtml;
