@@ -42,18 +42,14 @@ async function callApi(url, method, headers = {}, body = undefined) {
     }
 }
 
-async function postListing(title, description, image, endsAt) {
+async function postListing(title, description, images, endsAt, tags) {
 
     const listingData = {
         title: title,
         endsAt: endsAt,
         description: description,
-        media: [
-            {
-                url: image,
-                alt: 'Picture of the user\'s post',
-            }
-        ]
+        media: images,
+        tags: tags
     }
 
     return callApiWithAuth("/auction/listings", "POST", listingData)

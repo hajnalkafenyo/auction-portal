@@ -83,15 +83,15 @@ function tableRowContent(bids, isMax, isEnded) {
         if (isEnded) {
             tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-yellow-100 text-yellow-800">Winner</div></td>`
         } else {
-            tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-green-100 text-green-800">Current High Bid</div></td>`
+            tableRowContentElement = `<td class="bg-green-100"><div class="px-2 py-1 w-fit rounded-full bg-green-200 text-green-800">Current High Bid</div></td>`
         }
     } else {
         tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-gray-100 text-gray-800">OutBid</div></td>`
     }
     return `<tr class="border-b-2 grid gap-4 grid-cols-2 py-2 md:table-row">
-                <td><a class="flex flex-row gap-2" href="profile.html?id=${bids.bidder.name}"><img src="${bids.bidder.avatar.url}" alt="${bids.bidder.avatar.alt}" class="w-8 h-8 rounded-full"><span class="inline">${bids.bidder.name}</span></a></td>
-                <td>💰${bids.amount}</td>
-                <td>${date}</td>
+                <td class="${isMax ? "" : "hidden"}bg-green-100"><a class="flex flex-row gap-2" href="profile.html?id=${bids.bidder.name}"><img src="${bids.bidder.avatar.url}" alt="${bids.bidder.avatar.alt}" class="w-8 h-8 rounded-full"><span class="inline">${bids.bidder.name}</span></a></td>
+                <td class="${isMax ? "" : "hidden"}bg-green-100">💰${bids.amount}</td>
+                <td class="${isMax ? "" : "hidden"}bg-green-100">${date}</td>
                 ${tableRowContentElement}
             </tr> `
 
