@@ -10,15 +10,7 @@ async function fetchListing() {
     document.title = `BookBid | ${body.data.title}`
     listingContentElement.innerHTML = listinghtml;
     breadcrumbElement.innerHTML = breadcrumbHtml;
-    document.getElementById('bidButton').addEventListener("click", async (e) => {
-        const bidValue = parseInt(document.getElementById('bidValue').value);
-        if (bidValue > maxBid) {
-            await bidOnListing(listingid, bidValue);
-            location.reload();
-        } else {
-            return false;
-        }
-    })
+
 
     const setBidError = (message) => {
         const bidErrorElement = document.getElementById('bidError');
@@ -35,6 +27,17 @@ async function fetchListing() {
         bidErrorElement.innerHTML = "";
         bidErrorElement.classList.add("hidden");
     }
+
+    document.getElementById('bidButton').addEventListener("click", async (e) => {
+        const bidValue = parseInt(document.getElementById('bidValue').value);
+        if (bidValue > maxBid) {
+            await bidOnListing(listingid, bidValue);
+            location.reload();
+        } else {
+            setBidError("Bid is too low.")
+            return false;
+        }
+    })
 
     document.getElementById('bidValue').addEventListener("change", (e) => {
         const bidValue = parseInt(e.target.value);

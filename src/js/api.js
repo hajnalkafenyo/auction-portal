@@ -1,4 +1,4 @@
-let searchOnlyActive = false;
+let searchOnlyActive = true;
 
 async function callApiWithoutAuth(url, method, body) {
     return callApi(url, method, {}, body);

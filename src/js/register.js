@@ -31,6 +31,15 @@ document.getElementById("emailform").addEventListener("submit", async function (
     }
 
     const name = document.getElementById('name').value;
+    const nameError = document.getElementById('name-error');
+    const namePattern = /^[a-zA-Z0-9_]{1,20}$/;
+    if (namePattern.test(name) == false) {
+        nameError.innerText = 'Invalid name. Please write maximum 20 characters.';
+        return false;
+    } else {
+        nameError.innerText = '';
+    }
+
     const requestData = {
         "email": email,
         "password": password,
@@ -55,6 +64,7 @@ document.getElementById("emailform").addEventListener("submit", async function (
         window.location.href = "login.html"
     } catch (error) {
         console.error('Error sending data:', error);
+        // Show an error to the user
     }
 
 });

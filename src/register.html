@@ -17,12 +17,14 @@
             <div class="mb-4 inputfield">
                 <label class="">Name</label>
                 <input type="text" name="name" id="name" required placeholder="Your Name" />
+                <span id="name-error" class="input-error"></span>
+                <span class="helptext">Maximum 20 characters</span>
             </div>
             <div class="mb-4 inputfield">
                 <label class="">Email</label>
                 <input type="email" name="email" id="email" required placeholder="you@example.com" />
-                <span id="email-error" class="bg-red-500 text-red-200"></span>
-                <span>You should use @noroff.no email address</span>
+                <span id="email-error" class="input-error"></span>
+                <span class="helptext">You should use @noroff.no email address</span>
             </div>
             <div class="mb-6 inputfield">
                 <label>Password</label>
