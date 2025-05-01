@@ -23,8 +23,12 @@
   @apply border-solid rounded-md border-2 border-gray-200 shadow p-2 w-full;
 }
 
-.inputfield > span{
+.inputfield > .helptext{
   @apply text-xs text-gray-400;
+}
+
+.inputfield > .input-error {
+  @apply text-red-500  m-1 text-sm;
 }
 
 .button-primary{

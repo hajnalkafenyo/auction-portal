@@ -4,25 +4,39 @@ function getUserFromLocalStorage() {
     return user;
 }
 
+const noUserHtml = `<nav id="header" class="flex flex-row w-full justify-center p-2 bg-white border">
+        <div class="flex flex-row justify-between max-w-[1024px] w-full items-center">
+            <a href="/" class="flex flex-row gap-8 h-fit">
+                <img src="/images/logo.png" alt="BookBid Logo" style="height: 24px; width: 24px">
+                <span class="font-bold text-primary sm:block hidden">BookBid</span>
+            </a>
+            <div class="flex flex-row gap-4 items-center">
+                <a href="login.html" type="button" class="button-primary px-2 hidden md:block">Log In</a>
+            </div>
+        </div>
+    </nav>`
+
 let currentCredits = 0;
 
 async function getHeader() {
+    const headerElement = document.getElementById('header');
     const userFromLocalStorage = getUserFromLocalStorage()
     if (!userFromLocalStorage) {
+        headerElement.innerHTML = noUserHtml;
         return;
+    } else {
+        const userName = userFromLocalStorage.name;
+        const profile = await getProfile(userName);
+        currentCredits = profile.credits;
+        headerHtml = headerContent(profile);
+        headerElement.innerHTML = headerHtml;
+        const logOut = document.getElementById("logOut");
+        logOut.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+        })
     }
-    const userName = userFromLocalStorage.name;
-    const profile = await getProfile(userName);
-    currentCredits = profile.credits;
-    const headerElement = document.getElementById('header');
-    headerHtml = headerContent(profile);
-    headerElement.innerHTML = headerHtml;
-    const logOut = document.getElementById("logOut");
-    logOut.addEventListener("click", (e) => {
-        e.preventDefault();
-        localStorage.removeItem("user");
-        window.location.href = "login.html";
-    })
 
 }
 
