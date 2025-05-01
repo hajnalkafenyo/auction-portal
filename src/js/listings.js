@@ -1,6 +1,12 @@
+function sortedListings(listings) {
+    const sortedlistings = listings.sort((a, b) => (new Date(a.endsAt) - new Date(b.endsAt)));
+    return sortedlistings;
+}
+
 async function fetchListings() {
     const body = await getListings();
-    displayListings(body.data, true)
+    const newList = sortedListings(body.data);
+    displayListings(newList, true)
 }
 
 let timeoutHandle;

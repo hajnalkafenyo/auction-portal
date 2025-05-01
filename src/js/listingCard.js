@@ -33,6 +33,16 @@ function listingCard(listingData, shouldShowViewLink) {
     const isUserPostAuthor = listingData.seller?.name === user?.name;
     const isAnyBid = listingData._count.bids > 0;
 
+    let endsAtString = "";
+    const isEnded = new Date(listingData.endsAt) < new Date();
+    if (!isEnded) {
+        const date = dateDifferenceFuture(listingData.endsAt);
+        endsAtString = `Ends ${date} `
+    } else {
+        const date = dateDifference(listingData.endsAt);
+        endsAtString = `Ended ${date} `
+    }
+
     var bidText = "";
     if (listingData._count.bids === 0) {
         bidText = "No bids yet"
@@ -51,15 +61,18 @@ function listingCard(listingData, shouldShowViewLink) {
                 <div class="p-4">
                     <p id="listingTitle" class="font-bold text-primary text-lg overflow-hidden overflow-ellipsis"><a href="listing.html?id=${listingData.id}">${listingData.title}</a></p>
                         <div class="flex flex-row justify-between">
-                            <div>
+                            <div class="flex gap-2">
                                 <a href="profile.html?id=${listingData.seller?.name}">
-                                <div class="flex flex-row items-center justify-center gap-1">
+                                <div class="flex flex-row items-center justify-center gap-2">
                                     <div><img src="${listingData.seller?.avatar.url}" alt="${listingData.seller?.avatar.alt}" class="w-4 h-4 rounded-full" /></div>
                                     <div>${listingData.seller?.name}</div>
                                 </div>
                                 </a>
                             </div>
-                            <p>Created:${date}</p>
+                                <div class="flex flex-col gap-1">
+                                    <p>Created:${date}</p>
+                                    <p>${endsAtString}</p>
+                                </div>
                             </div>
                             <hr />
                                 <div id="listingBody">
