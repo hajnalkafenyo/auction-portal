@@ -11,6 +11,25 @@ async function fetchListing() {
     listingContentElement.innerHTML = listinghtml;
     breadcrumbElement.innerHTML = breadcrumbHtml;
 
+    document.getElementById("share-button").addEventListener("click", () => {
+        const postTitle = body.data.title
+        const postFile = body.data.media?.[0]?.url || "";
+        const postUrl = window.location.href;
+        const seller = body.data.seller.name;
+        const postBody = `Check out this listing from ${seller} on this link: ${postUrl}`;
+
+        const postData = {
+            postTitle,
+            postBody,
+            postFile
+        }
+
+        const postDataEncoded = btoa(JSON.stringify(postData))
+
+        const url = `https://hajnalka-social-noroff.netlify.app/feed/index.html?data=${postDataEncoded}`
+
+        window.open(url);
+    });
 
     const setBidError = (message) => {
         const bidErrorElement = document.getElementById('bidError');
@@ -204,7 +223,7 @@ function listingContent(body) {
                 </div>
             </div>
             <div class="flex justify-end w-full">
-                <button class="rounded-lg bg-white p-2 border border-black">Share</button>
+                <button class="rounded-lg bg-white p-2 border border-black" id="share-button">Share</button>
             </div>
             <div class="box p-4 w-full">
                 <h2 class="text-primary font-medium">About this listing</h2>
