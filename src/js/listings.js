@@ -4,9 +4,11 @@ function sortedListings(listings) {
 }
 
 async function fetchListings() {
+    showLoading()
     const body = await getListings();
     const newList = sortedListings(body.data);
     displayListings(newList, true)
+    hideLoading()
 }
 
 let timeoutHandle;
@@ -43,9 +45,19 @@ document.getElementById("search-input").addEventListener("input", async (e) => {
     }, 1000)
 })
 
+const hideLoading = () => {
+    const loading = document.getElementsByClassName('loading')[0];
+    document.getElementById('listing-container').style.display = "grid";
+    loading.style.display = 'none';
+};
+const showLoading = () => {
+    const loading = document.getElementsByClassName('loading')[0];
+    document.getElementById('listing-container').style.display = "none"
+    loading.style.display = 'block';
+};
+
 const element = document.getElementById("active-toggle")
 element.addEventListener("change", (e) => {
-    console.log(e.target.checked)
     searchOnlyActive = e.target.checked;
     fetchListings()
 })
