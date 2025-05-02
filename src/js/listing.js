@@ -181,7 +181,7 @@ function listingContent(body) {
                         ${body.title}
                     </div>
                     <div>
-                        <ul class="flex flex-row gap-2">
+                        <ul class="flex flex-row flex-wrap whitespace-nowrap gap-2">
                            ${tags}
                         </ul>
                     </div>
