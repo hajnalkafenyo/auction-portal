@@ -58,7 +58,8 @@ document.getElementById("emailform").addEventListener("submit", async function (
         });
         if (!response.ok) {
             const data = await response.json();
-            throw new Error(`Failed to register profile: ${data.errors.map((e) => e.message).join(", ")}`);
+            document.getElementById("user-error").innerHTML = `Failed to register profile: ${data.errors.map((e) => e.message).join(", ")}`;
+            return;
         }
 
         window.location.href = "login.html"
