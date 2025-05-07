@@ -13,6 +13,16 @@ async function displayListings(listings, shouldShowViewLink) {
 
     document.getElementById('listing-container').innerHTML = s;
     document.getElementById('listing-container').style.display = 'grid';
+
+    const deleteButtonClickHandler = async (e) => {
+        const id = e.target.attributes["data-deleteid"].value
+        await deleteListing(id);
+        window.location.reload();
+    }
+
+    [...document.getElementsByClassName('delete-button')].forEach(button => button.addEventListener("click", deleteButtonClickHandler))
+
+
 }
 
 async function listBid() {
@@ -87,8 +97,10 @@ function listingCard(listingData, shouldShowViewLink) {
                                     </div>
                                     
                                     <a href="listing.html?id=${listingData.id}" type="button" class="${isUserPostAuthor ? "hidden" : ""} bg-secondary p-2 pt-2 rounded-lg text-primary font-medium">Place Bid</a>
+                                    <button type="button" class="${isUserPostAuthor ? "" : "hidden"} bg-primary p-2 pt-2 rounded-lg text-white font-medium delete-button" data-deleteid="${listingData.id}">Delete</button>
                             </div>
                         </div>
                     </div>
     `
 }
+

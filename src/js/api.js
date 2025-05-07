@@ -100,3 +100,11 @@ async function getListing(listingId) {
 async function search(searchTerm) {
     return callApiWithoutAuth(`/auction/listings/search?q=${searchTerm}&_seller=true&_bids=true`, "GET")
 }
+
+async function deleteListing(listingId) {
+    return callApiWithAuth(`/auction/listings/${listingId}`, "DELETE")
+}
+
+async function updateListing(listingId, updatedData) {
+    return callApiWithAuth(`/auction/listings/${listingId}`, "PUT", updatedData)
+}

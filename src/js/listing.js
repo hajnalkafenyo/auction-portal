@@ -10,7 +10,75 @@ async function fetchListing() {
     document.title = `BookBid | ${body.data.title}`
     listingContentElement.innerHTML = listinghtml;
     breadcrumbElement.innerHTML = breadcrumbHtml;
+    const editListingButtons = document.querySelectorAll(".edit-listing-button");
+    const listingForm = document.querySelector(".edit-listing-form");
+    listingForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = e.target.querySelector(".edit-form-title").value;
+        const description = e.target.querySelector(".edit-form-description").value;
+        const tagsValue = e.target.querySelector(".edit-form-tags").value;
+        const tags = tagsValue.split(",").map(e => e.trim())
 
+        const pictureInputs = e.target.querySelectorAll(".edit-form-picture")
+        const pictures = [...pictureInputs].map((input) => input.value).filter(value => !!value).map((value) => {
+            return {
+                url: value,
+                alt: "Listing Picture"
+            }
+        })
+
+        const updatedData = {
+            title: title,
+            media: pictures,
+            description: description,
+            tags: tags,
+        }
+        await updateListing(listingid, updatedData);
+        window.location.reload();
+    })
+
+    editListingButtons.forEach(editListingButton => editListingButton.addEventListener("click", (e) => {
+        document.querySelector(".card-listing-form").classList.toggle("hidden");
+    }));
+
+    const fileInputWrappers = document.querySelectorAll('.file-input-wrapper');
+    const fileInputs = document.querySelectorAll('input[type="url"]');
+
+    const fileInputChangeHandler = (e) => {
+        const contents = [...fileInputs].map((input) => {
+            return input.value
+        }).filter((e) => !!e);
+
+        for (let i = 0; i < 5; i++) {
+            let content = "";
+            if (contents.length > i) {
+                content = contents[i]
+            }
+            document.getElementById(`listingFile${i}`).value = content
+        }
+
+        fileInputs.forEach((input) => {
+            const id = parseInt(input.id.slice(-1));
+            const hasContent = !!input.value
+            console.log(id, input.value, hasContent)
+            if (id <= 3) {
+                if (hasContent) {
+                    fileInputWrappers[id].classList.remove("hidden")
+                } else {
+                    if (id < 4 && !fileInputs[id + 1].value) {
+                        console.log("Adding hidden to id", id)
+                        fileInputWrappers[id].classList.add("hidden")
+                    }
+                }
+            }
+
+        });
+    };
+
+    fileInputs.forEach((input) => {
+        input.addEventListener("keyup", fileInputChangeHandler)
+    })
+    fileInputChangeHandler();
     document.getElementById("share-button").addEventListener("click", () => {
         const postTitle = body.data.title
         const postFile = body.data.media?.[0]?.url || "";
@@ -49,28 +117,33 @@ async function fetchListing() {
 
     document.getElementById('bidButton').addEventListener("click", async (e) => {
         const bidValue = parseInt(document.getElementById('bidValue').value);
-        if (bidValue > maxBid) {
-            await bidOnListing(listingid, bidValue);
-            location.reload();
-        } else {
-            setBidError("Bid is too low.")
-            return false;
-        }
-    })
-
-    document.getElementById('bidValue').addEventListener("change", (e) => {
-        const bidValue = parseInt(e.target.value);
-        if (bidValue < maxBid) {
-            setBidError(`Bid must be higher than ${maxBid}`);
+        if (currentCredits === 0) {
             return false;
         }
 
-        if (currentCredits > 0 && bidValue > currentCredits) {
+        if (bidValue <= maxBid) {
+
+            setBidError(`Bid must be higher than ${maxBid}`)
+            return false;
+        }
+
+        if (bidValue > currentCredits) {
             setBidError(`You don't have enough credits`);
             return false;
         }
-        clearBidError();
+
+        try {
+            clearBidError();
+            await bidOnListing(listingid, bidValue);
+            location.reload();
+        }
+        catch (error) {
+            setBidError(error.message);
+        }
+        return
     })
+
+
 
 }
 
@@ -222,9 +295,64 @@ function listingContent(body) {
                     </div>
                 </div>
             </div>
-            <div class="flex justify-end w-full">
+            <div class="flex justify-between w-full">
+                <button type="button" class="${isUserListingAuthor ? "" : "hidden"} button-primary px-2 edit-listing-button">Edit</button>
                 <button class="rounded-lg bg-white p-2 border border-black" id="share-button">Share</button>
             </div>
+            
+            </div>
+            <div class="card-body card-listing-form hidden">
+                <form class="edit-listing-form">
+                    <div class="form-floating">
+                        <div class="mb-4 inputfield">
+                            <label for="banner" class="form-label">Title</label>
+                            <input value="${body.title || ""}" class="form-control edit-form-title"  type="text" placeholder="Leave a picture here"/>
+                        </div>
+                        <div class="mb-4 inputfield">
+                            <label for="picture" class="form-label">Picture 1</label>
+                            <input id="listingFile0" value="${body.media[0]?.url || ""}" alt="${body.media[0]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                        </div>
+                        <div class="file-input-wrapper hidden">
+                            <div class="mb-4 inputfield">
+                                <label for="picture" class="form-label">Picture 2</label>
+                                <input id="listingFile1" value="${body.media[1]?.url || ""}" alt="${body.media[1]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper hidden">
+                            <div class="mb-4 inputfield">
+                                <label for="picture" class="form-label">Picture 3</label>
+                                <input id="listingFile2" value="${body.media[2]?.url || ""}" alt="${body.media[2]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper hidden">
+                            <div class="mb-4 inputfield">
+                                <label for="picture" class="form-label">Picture 4</label>
+                                <input id="listingFile3" value="${body.media[3]?.url || ""}" alt="${body.media[3]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper hidden">
+                            <div class="mb-4 inputfield">
+                                <label for="picture" class="form-label">Picture 5</label>
+                                <input id="listingFile4" value="${body.media[4]?.url || ""}" alt="${body.media[4]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control edit-form-description" 
+                            placeholder="Write a description here">${body.description || ""}</textarea>
+                        </div>
+                        <div class="mb-4 inputfield">
+                            <label class="text-primary">Tags</label>
+                            <input type="text" name="tags" class="form-control edit-form-tags"
+                                value="${body.tags || ""}" />
+                        </div>
+                        </div>
+                            <button class="button-primary px-2" type="submit">Save</button>
+                            <button class="bg-secondary p-2 pt-2 rounded-lg text-primary font-medium edit-listing-button" type="button">Cancel</button>
+                        </div>
+                    </div >
+                </form>    
+            </div>      
             <div class="box p-4 w-full">
                 <h2 class="text-primary font-medium">About this listing</h2>
                 <div>${body.description || "<span class=\"italic\">No description provided</span>"}</div>
