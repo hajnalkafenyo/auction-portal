@@ -65,7 +65,6 @@ document.getElementById("emailform").addEventListener("submit", async function (
         window.location.href = "login.html"
     } catch (error) {
         console.error('Error sending data:', error);
-        // Show an error to the user
     }
 
 });

@@ -32,7 +32,9 @@ document.getElementById("form").addEventListener("submit", async function (event
             body: JSON.stringify(requestData)
         });
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
+            document.getElementById("inlogging-error").innerHTML = `Failed to log in: ${data.errors.map((e) => e.message).join(", ")}`;
+            return;
         }
         const data = await response.json();
         const user = {
