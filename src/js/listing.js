@@ -3,15 +3,17 @@ async function fetchListing() {
     const listingid = urlParams.get('id');
     const body = await getListing(listingid);
     const maxBid = getMaxBid(body.data.bids);
+
     const listingContentElement = document.getElementById('listingContent');
-    listinghtml = listingContent(body.data);
     const breadcrumbElement = document.getElementById('breadcrumb');
+    const editListingButtons = document.querySelectorAll(".edit-listing-button");
+    const listingForm = document.querySelector(".edit-listing-form");
+
+    listinghtml = listingContent(body.data);
     breadcrumbHtml = getBreadcrumb(body.data);
     document.title = `BookBid | ${body.data.title}`
     listingContentElement.innerHTML = listinghtml;
     breadcrumbElement.innerHTML = breadcrumbHtml;
-    const editListingButtons = document.querySelectorAll(".edit-listing-button");
-    const listingForm = document.querySelector(".edit-listing-form");
     listingForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const title = e.target.querySelector(".edit-form-title").value;
@@ -60,13 +62,11 @@ async function fetchListing() {
         fileInputs.forEach((input) => {
             const id = parseInt(input.id.slice(-1));
             const hasContent = !!input.value
-            console.log(id, input.value, hasContent)
             if (id <= 3) {
                 if (hasContent) {
                     fileInputWrappers[id].classList.remove("hidden")
                 } else {
                     if (id < 4 && !fileInputs[id + 1].value) {
-                        console.log("Adding hidden to id", id)
                         fileInputWrappers[id].classList.add("hidden")
                     }
                 }
@@ -148,7 +148,6 @@ async function fetchListing() {
 }
 
 function getBreadcrumb(body) {
-
     return `
     </nav>
     <div class="container max-w-[1024px] mx-auto w-full">
@@ -191,6 +190,7 @@ function tableRowContent(bids, isMax, isEnded) {
             </tr> `
 
 }
+
 function tableContent(bids, isEnded) {
     let s = "";
     for (let i = 0; i < bids.length; i++) {
@@ -200,8 +200,6 @@ function tableContent(bids, isEnded) {
     }
     return s;
 }
-
-
 
 function listingContent(body) {
     let endsAtString = "";
@@ -223,7 +221,6 @@ function listingContent(body) {
         bidText = body._count.bids + " total bids"
     }
 
-
     const tags = displayTags(body.tags)
     const sortedBid = getSortedBid(body.bids);
     const maxBid = getMaxBid(body.bids);
@@ -232,14 +229,13 @@ function listingContent(body) {
     const userName = body.seller?.name;
     const isUserListingAuthor = userName === getUserFromLocalStorage().name;
 
-
-
     return `
         <div class="grid grid-cols-12 w-full gap-4 p-1 md:p-4">
             <div class="flex flex-col gap-2 col-span-12 md:col-span-7">
                  <div class="relative">
                     <img src="${body.media[0]?.url || "/images/missing-image.png"}" alt="${body.media[0]?.alt || "Picture not found"}" class="border-[16px] border-solid border-white w-full max-h-screen">
-                    <div class="absolute top-4 left-8 rounded h-fit py-1 px-2">${generateBadge(body)}
+                    <div class="absolute top-4 left-8 rounded h-fit py-1 px-2">
+                        ${generateBadge(body)}
                     </div>
                 </div>
                 <div class="flex flex-row gap-2 justify-between">
@@ -276,106 +272,107 @@ function listingContent(body) {
                             </div>
                             <div class=" flex flex-row p-2 group/inputfield">
                                 <input type="number" id="bidValue" min="${maxBid}" value="${maxBid + 1}" class="p-2 min-h-[72px] m-0 invalid:border-red-500 group-hover/inputfield:invalid:border-red-400 border-2 rounded-s-lg peer">
-                                <button dir="rtl"
-                                    id="bidButton" class="button bg-primary peer-invalid:bg-red-500 group-hover/inputfield:peer-invalid:bg-red-400 group-hover/inputfield:bg-primary/90 rounded-s-lg py-2 font-bold text-white w-32 min-h-[72px] m-0">Place
-                                    Bid</button>
+                                <button dir="rtl" id="bidButton" class="button bg-primary peer-invalid:bg-red-500 group-hover/inputfield:peer-invalid:bg-red-400 group-hover/inputfield:bg-primary/90 rounded-s-lg py-2 font-bold text-white w-32 min-h-[72px] m-0">
+                                    Place Bid
+                                </button>
                             </div>
                             <div id="bidError" class="hidden text-red-500 text-sm"></div>
-                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="flex flex-row gap-2 items-center">
-                            <img class="w-8 h-8 rounded-full" src="${body.seller.avatar.url}" alt="${body.seller.avatar.alt}">
+                </div>
+                <div>
+                    <div class="flex flex-row gap-2 items-center">
+                        <img class="w-8 h-8 rounded-full" src="${body.seller.avatar.url}" alt="${body.seller.avatar.alt}">
                         <div class="flex flex-col">
                             <p>Listed by: </p>
                             <a href="profile.html?id=${body.seller?.name}" class="font-medium text-primary">${body.seller?.name}</a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="flex justify-between w-full">
+            <button type="button" class="${isUserListingAuthor ? "" : "hidden"} button-primary px-2 edit-listing-button">Edit</button>
+            <button class="rounded-lg bg-white p-2 border border-black" id="share-button">Share</button>
+        </div>
+        <div class="card-body card-listing-form hidden">
+            <form class="edit-listing-form">
+                <div class="form-floating">
+                    <div class="mb-4 inputfield">
+                        <label for="banner" class="form-label">Title</label>
+                        <input value="${body.title || ""}" class="form-control edit-form-title"  type="text" placeholder="Leave a picture here"/>
+                    </div>
+                    <div class="mb-4 inputfield">
+                        <label for="picture" class="form-label">Picture 1</label>
+                        <input id="listingFile0" value="${body.media[0]?.url || ""}" alt="${body.media[0]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                    </div>
+                    <div class="file-input-wrapper hidden">
+                        <div class="mb-4 inputfield">
+                            <label for="picture" class="form-label">Picture 2</label>
+                            <input id="listingFile1" value="${body.media[1]?.url || ""}" alt="${body.media[1]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                        </div>
+                    </div>
+                    <div class="file-input-wrapper hidden">
+                        <div class="mb-4 inputfield">
+                            <label for="picture" class="form-label">Picture 3</label>
+                            <input id="listingFile2" value="${body.media[2]?.url || ""}" alt="${body.media[2]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                        </div>
+                    </div>
+                    <div class="file-input-wrapper hidden">
+                        <div class="mb-4 inputfield">
+                            <label for="picture" class="form-label">Picture 4</label>
+                            <input id="listingFile3" value="${body.media[3]?.url || ""}" alt="${body.media[3]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                        </div>
+                    </div>
+                    <div class="file-input-wrapper hidden">
+                        <div class="mb-4 inputfield">
+                            <label for="picture" class="form-label">Picture 5</label>
+                            <input id="listingFile4" value="${body.media[4]?.url || ""}" alt="${body.media[4]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control edit-form-description" placeholder="Write a description here">
+                            ${body.description || ""}
+                        </textarea>
+                    </div>
+                    <div class="mb-4 inputfield">
+                        <label class="text-primary">Tags</label>
+                        <input type="text" name="tags" class="form-control edit-form-tags"
+                            value="${body.tags || ""}" />
+                    </div>
+                    </div>
+                        <button class="button-primary px-2" type="submit">Save</button>
+                        <button class="bg-secondary p-2 pt-2 rounded-lg text-primary font-medium edit-listing-button" type="button">Cancel</button>
+                    </div>
                 </div>
-            </div>
-            <div class="flex justify-between w-full">
-                <button type="button" class="${isUserListingAuthor ? "" : "hidden"} button-primary px-2 edit-listing-button">Edit</button>
-                <button class="rounded-lg bg-white p-2 border border-black" id="share-button">Share</button>
-            </div>
-            
-            </div>
-            <div class="card-body card-listing-form hidden">
-                <form class="edit-listing-form">
-                    <div class="form-floating">
-                        <div class="mb-4 inputfield">
-                            <label for="banner" class="form-label">Title</label>
-                            <input value="${body.title || ""}" class="form-control edit-form-title"  type="text" placeholder="Leave a picture here"/>
-                        </div>
-                        <div class="mb-4 inputfield">
-                            <label for="picture" class="form-label">Picture 1</label>
-                            <input id="listingFile0" value="${body.media[0]?.url || ""}" alt="${body.media[0]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
-                        </div>
-                        <div class="file-input-wrapper hidden">
-                            <div class="mb-4 inputfield">
-                                <label for="picture" class="form-label">Picture 2</label>
-                                <input id="listingFile1" value="${body.media[1]?.url || ""}" alt="${body.media[1]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
-                            </div>
-                        </div>
-                        <div class="file-input-wrapper hidden">
-                            <div class="mb-4 inputfield">
-                                <label for="picture" class="form-label">Picture 3</label>
-                                <input id="listingFile2" value="${body.media[2]?.url || ""}" alt="${body.media[2]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
-                            </div>
-                        </div>
-                        <div class="file-input-wrapper hidden">
-                            <div class="mb-4 inputfield">
-                                <label for="picture" class="form-label">Picture 4</label>
-                                <input id="listingFile3" value="${body.media[3]?.url || ""}" alt="${body.media[3]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
-                            </div>
-                        </div>
-                        <div class="file-input-wrapper hidden">
-                            <div class="mb-4 inputfield">
-                                <label for="picture" class="form-label">Picture 5</label>
-                                <input id="listingFile4" value="${body.media[4]?.url || ""}" alt="${body.media[4]?.alt}"class="form-control edit-form-picture"  type="url" placeholder="Leave a picture here"/>
-                            </div>
-                        </div>
-                        <div>
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control edit-form-description" 
-                            placeholder="Write a description here">${body.description || ""}</textarea>
-                        </div>
-                        <div class="mb-4 inputfield">
-                            <label class="text-primary">Tags</label>
-                            <input type="text" name="tags" class="form-control edit-form-tags"
-                                value="${body.tags || ""}" />
-                        </div>
-                        </div>
-                            <button class="button-primary px-2" type="submit">Save</button>
-                            <button class="bg-secondary p-2 pt-2 rounded-lg text-primary font-medium edit-listing-button" type="button">Cancel</button>
-                        </div>
-                    </div >
-                </form>    
-            </div>      
-            <div class="box p-4 w-full">
-                <h2 class="text-primary font-medium">About this listing</h2>
-                <div>${body.description || "<span class=\"italic\">No description provided</span>"}</div>
-            </div>
-            <div class="box p-4 mb-4 w-full">
-                <h1 class="header-1">Bid History</h1>
-                <table class="w-full">
-                    <thead class="font-thin hidden md:table-header-group">
-                        <tr class="hidden md:table-row">
-                            <th class="text-md text-gray-500 font-normal text-left">Bidder</th>
-                            <th class="text-md text-gray-500 font-normal text-left">Amount</th>
-                            <th class="text-md text-gray-500 font-normal text-left">Date & Time</th>
-                            <th class="text-md text-gray-500 font-normal text-left">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${tableContentElement}
-                    </tbody>
-                </table>
-            </div>
-            <div class="flex justify-center mb-4">
-                <a href="index.html" type="button" class="bg-white border p-2 pt-2 rounded-lg text-primary m-2">View all Listings</a>
-            </div>
+            </form>
+        </div>
+        <div class="box p-4 w-full">
+            <h2 class="text-primary font-medium">About this listing</h2>
+            <div>${body.description || "<span class=\"italic\">No description provided</span>"}</div>
+        </div>
+        <div class="box p-4 mb-4 w-full">
+            <h1 class="header-1">Bid History</h1>
+            <table class="w-full">
+                <thead class="font-thin hidden md:table-header-group">
+                    <tr class="hidden md:table-row">
+                        <th class="text-md text-gray-500 font-normal text-left">Bidder</th>
+                        <th class="text-md text-gray-500 font-normal text-left">Amount</th>
+                        <th class="text-md text-gray-500 font-normal text-left">Date & Time</th>
+                        <th class="text-md text-gray-500 font-normal text-left">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableContentElement}
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-center mb-4">
+            <a href="index.html" type="button" class="bg-white border p-2 pt-2 rounded-lg text-primary m-2">
+                View all Listings
+            </a>
+        </div>
     `
 }
 

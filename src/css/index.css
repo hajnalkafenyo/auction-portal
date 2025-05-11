@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    
-  }
-
+:root {}
 
 .header-1 {
   @apply text-[2rem] font-bold text-primary;

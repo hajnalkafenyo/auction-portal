@@ -32,7 +32,6 @@ if (form !== null) {
     });
 }
 
-
 const fileInputChangeHandler = (e) => {
     const contents = [...fileInputs].map((input) => {
         return input.value
@@ -49,7 +48,6 @@ const fileInputChangeHandler = (e) => {
     fileInputs.forEach((input) => {
         const id = parseInt(input.id.slice(-1));
         const hasContent = !!input.value
-        console.log(id, input.value)
         if (id <= 3) {
             if (hasContent) {
                 fileInputWrappers[id].classList.remove("hidden")

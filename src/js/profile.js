@@ -56,7 +56,6 @@ function profileContent(user) {
     const userName = getUserName();
     const isUserListingAuthor = userName === getUserFromLocalStorage().name;
     return `
-   
             <div class="relative mb-8">
                 <img src="${user.banner}" alt="${user.bannerAlt}" class="object-cover w-full h-72">
                 <div class="absolute -bottom-10 left-4">
@@ -79,7 +78,7 @@ function profileContent(user) {
                     <p class="font-bold text-green-600">${user.credits} Credits</p>
                 </div>
                 <div class="m-1">
-                <button type="button" class="${isUserListingAuthor ? "" : "hidden"} button-primary px-2 edit-profile-button">Edit</button>
+                    <button type="button" class="${isUserListingAuthor ? "" : "hidden"} button-primary px-2 edit-profile-button">Edit</button>
                 </div>
             </div>
             <div class="card-body card-profile-form hidden">
@@ -102,7 +101,7 @@ function profileContent(user) {
                             <button class="button-primary px-2" type="submit">Save</button>
                             <button class="bg-secondary p-2 pt-2 rounded-lg text-primary font-medium edit-profile-button" type="button">Cancel</button>
                         </div>
-                    </div >
+                    </div>
                 </form>    
             </div>        
             <div class="flex flex-row justify-between">

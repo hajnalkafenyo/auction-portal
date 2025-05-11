@@ -77,10 +77,6 @@ function getStatus(listing) {
 
     return "active";
 }
-function isCurrentUser(userName) {
-    //isUserName is in the localStorage
-
-}
 
 function getSortedBid(bids) {
     const sortedBid = bids.sort((a, b) => (b.amount - a.amount));
@@ -114,9 +110,7 @@ function generateBadge(listing) {
         case "sold":
             return `<div class="text-gray-700 border-gray-500 bg-gray-300 ${commonClasses}">Sold</div>`
     }
-
 }
-
 
 function getUserName() {
     const urlParams = new URLSearchParams(window.location.search);

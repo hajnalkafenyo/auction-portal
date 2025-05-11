@@ -62,45 +62,57 @@ function listingCard(listingData, shouldShowViewLink) {
         bidText = listingData._count.bids + " total bids"
     }
     return `
-         <div class="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-4 border rounded border-gray-200 bg-white shadow-sm m-1">
+        <div class="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-4 border rounded border-gray-200 bg-white shadow-sm m-1">
             <div class="flex flex-row relative">
                 <img src="${listingData.media[0]?.url}" alt="${listingData.media?.alt || ""}" onerror="this.src='/images/missing-image.png'" class="object-cover h-[300px] w-full">
-                <div class="absolute top-4 right-8 rounded h-fit">${generateBadge(listingData)}</div>
-
+                <div class="absolute top-4 right-8 rounded h-fit">
+                    ${generateBadge(listingData)}
+                </div>
             </div>
-                <div class="p-4">
-                    <p id="listingTitle" class="font-bold text-primary text-lg overflow-hidden overflow-ellipsis"><a href="listing.html?id=${listingData.id}">${listingData.title}</a></p>
-                        <div class="flex flex-row justify-between">
-                            <div class="flex gap-2">
-                                <a href="profile.html?id=${listingData.seller?.name}">
-                                <div class="flex flex-row items-center justify-center gap-2">
-                                    <div><img src="${listingData.seller?.avatar.url}" alt="${listingData.seller?.avatar.alt}" class="w-4 h-4 rounded-full" /></div>
-                                    <div>${listingData.seller?.name}</div>
+            <div class="p-4">
+                <p id="listingTitle" class="font-bold text-primary text-lg overflow-hidden overflow-ellipsis">
+                    <a href="listing.html?id=${listingData.id}">${listingData.title}</a>
+                </p>
+                <div class="flex flex-row justify-between">
+                    <div class="flex gap-2">
+                        <a href="profile.html?id=${listingData.seller?.name}">
+                            <div class="flex flex-row items-center justify-center gap-2">
+                                <div>
+                                    <img src="${listingData.seller?.avatar.url}" alt="${listingData.seller?.avatar.alt}" class="w-4 h-4 rounded-full" />
                                 </div>
-                                </a>
-                            </div>
-                                <div class="flex flex-col gap-1">
-                                    <p>Created:${date}</p>
-                                    <p>${endsAtString}</p>
+                                <div>
+                                    ${listingData.seller?.name}
                                 </div>
                             </div>
-                            <hr />
-                                <div id="listingBody">
-                                    <p class="text-sm my-3 overflow-hidden overflow-ellipsis">${listingData.description || "<span class=\"italic\">No description provided</span>"}</p>
-                                </div>
-                            <hr />
-                                <div class="flex flex-row justify-between items-center">
-                                    <div>
-                                        <p class="text-sm mt-3">Current Bid</p>
-                                        <p class="font-bold text-primary">💰${maxBid}</p>
-                                        <p class="text-sm text-gray-400">${bidText}</p>
-                                    </div>
-                                    
-                                    <a href="listing.html?id=${listingData.id}" type="button" class="${isUserPostAuthor ? "hidden" : ""} bg-secondary p-2 pt-2 rounded-lg text-primary font-medium">Place Bid</a>
-                                    <button type="button" class="${isUserPostAuthor ? "" : "hidden"} bg-primary p-2 pt-2 rounded-lg text-white font-medium delete-button" data-deleteid="${listingData.id}">Delete</button>
-                            </div>
-                        </div>
+                        </a>
                     </div>
+                    <div class="flex flex-col gap-1">
+                        <p>Created: ${date}</p>
+                        <p>${endsAtString}</p>
+                    </div>
+                </div>
+                <hr />
+                <div id="listingBody">
+                    <p class="text-sm my-3 overflow-hidden overflow-ellipsis">
+                        ${listingData.description || '<span class="italic">No description provided</span>'}
+                    </p>
+                </div>
+                <hr />
+                <div class="flex flex-row justify-between items-center">
+                    <div>
+                        <p class="text-sm mt-3">Current Bid</p>
+                        <p class="font-bold text-primary">💰${maxBid}</p>
+                        <p class="text-sm text-gray-400">${bidText}</p>
+                    </div>
+                    <a href="listing.html?id=${listingData.id}" type="button" class="${isUserPostAuthor ? "hidden" : ""} bg-secondary p-2 pt-2 rounded-lg text-primary font-medium">
+                        Place Bid
+                    </a>
+                    <button type="button" class="${isUserPostAuthor ? "" : "hidden"} bg-primary p-2 pt-2 rounded-lg text-white font-medium delete-button" data-deleteid="${listingData.id}">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
     `
 }
 

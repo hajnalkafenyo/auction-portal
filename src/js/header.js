@@ -41,8 +41,6 @@ async function getHeader() {
 }
 
 function headerContent(user) {
-
-
     return `
     <nav id="header" class="flex flex-row w-full justify-center p-2 bg-white border">
         <div class="flex flex-row justify-between max-w-[1024px] w-full items-center">
@@ -64,7 +62,6 @@ function headerContent(user) {
 
 document.addEventListener("readystatechange", (e) => {
     if (document.readyState === "complete") {
-        getHeader().then(() => console.log('done'))
-
+        getHeader()
     }
 })
