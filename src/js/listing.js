@@ -176,7 +176,7 @@ function tableRowContent(bids, isMax, isEnded) {
     let tableRowContentElement = ""
     if (isMax) {
         if (isEnded) {
-            tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-yellow-100 text-yellow-800">Winner</div></td>`
+            tableRowContentElement = `<td class="bg-green-100"><div class="px-2 py-1 w-fit rounded-full bg-yellow-300 text-yellow-800">Winner</div></td>`
         } else {
             tableRowContentElement = `<td class="bg-green-100"><div class="px-2 py-1 w-fit rounded-full bg-green-200 text-green-800">Current High Bid</div></td>`
         }
@@ -184,9 +184,9 @@ function tableRowContent(bids, isMax, isEnded) {
         tableRowContentElement = `<td><div class="px-2 py-1 w-fit rounded-full bg-gray-100 text-gray-800">OutBid</div></td>`
     }
     return `<tr class="border-b-2 grid gap-4 grid-cols-2 py-2 md:table-row">
-                <td class="${isMax ? "" : "hidden"}bg-green-100"><a class="flex flex-row gap-2" href="profile.html?id=${bids.bidder.name}"><img src="${bids.bidder.avatar.url}" alt="${bids.bidder.avatar.alt}" class="w-8 h-8 rounded-full"><span class="inline">${bids.bidder.name}</span></a></td>
-                <td class="${isMax ? "" : "hidden"}bg-green-100">💰${bids.amount}</td>
-                <td class="${isMax ? "" : "hidden"}bg-green-100">${date}</td>
+                <td class="${isMax ? "bg-green-100" : ""}"><a class="flex flex-row gap-2" href="profile.html?id=${bids.bidder.name}"><img src="${bids.bidder.avatar.url}" alt="${bids.bidder.avatar.alt}" class="w-8 h-8 rounded-full"><span class="inline">${bids.bidder.name}</span></a></td>
+                <td class="${isMax ? "bg-green-100" : ""}">💰${bids.amount}</td>
+                <td class="${isMax ? "bg-green-100" : ""}">${date}</td>
                 ${tableRowContentElement}
             </tr> `
 
@@ -236,63 +236,63 @@ function listingContent(body) {
 
     return `
         <div class="grid grid-cols-12 w-full gap-4 p-1 md:p-4">
-                <div class="flex flex-col gap-2 col-span-12 md:col-span-7">
-                    <div class="relative">
-                        <img src="${body.media[0]?.url || "/images/missing-image.png"}" alt="${body.media[0]?.alt || "Picture not found"}" class="border-[16px] border-solid border-white  w-full max-h-screen">
-                        <div class="absolute top-4 left-8 rounded h-fit py-1 px-2">${generateBadge(body)}
-                             </div>
-                    </div>
-                    <div class="flex flex-row gap-2 justify-between">
-                        <img src="${body.media[1]?.url || ""}" alt="${body.media[1]?.alt || ""}" class="max-w-24">
-                        <img src="${body.media[2]?.url || ""}" alt="${body.media[2]?.alt || ""}" class="max-w-24">
-                        <img src="${body.media[3]?.url || ""}" alt="${body.media[3]?.alt || ""}" class="max-w-24">
-                        <img src="${body.media[4]?.url || ""}" alt="${body.media[4]?.alt || ""}" class="max-w-24">
+            <div class="flex flex-col gap-2 col-span-12 md:col-span-7">
+                 <div class="relative">
+                    <img src="${body.media[0]?.url || "/images/missing-image.png"}" alt="${body.media[0]?.alt || "Picture not found"}" class="border-[16px] border-solid border-white w-full max-h-screen">
+                    <div class="absolute top-4 left-8 rounded h-fit py-1 px-2">${generateBadge(body)}
                     </div>
                 </div>
-                <div class="box flex flex-col p-4 gap-4 col-span-12 md:col-span-5">
-                    <div class="header-1">
-                        ${body.title}
-                    </div>
-                    <div>
-                        <ul class="flex flex-row flex-wrap whitespace-nowrap gap-2">
-                           ${tags}
-                        </ul>
-                    </div>
-                    <div class="flex flex-row justify-between items-center content-between ">
-                        <div class="border flex flex-col gap-8 rounded border-gray-200 bg-gray-100 shadow-sm p-2 w-full">
-                            <div class="flex flex-row justify-between">
-                                <div>
-                                    <p id="BidContent">Current Bid</p>
-                                    <p class="font-bold text-primary">💰${maxBid}</p>
-                                    <p>${bidText}</p>
-                                </div>
-                                <div>
-                                    <p>${endsAtString}</p>
-                                </div>
+                <div class="flex flex-row gap-2 justify-between">
+                    <img src="${body.media[1]?.url || ""}" alt="${body.media[1]?.alt || ""}" class="object-cover max-w-24">
+                    <img src="${body.media[2]?.url || ""}" alt="${body.media[2]?.alt || ""}" class="object-cover max-w-24">
+                    <img src="${body.media[3]?.url || ""}" alt="${body.media[3]?.alt || ""}" class="object-cover max-w-24">
+                    <img src="${body.media[4]?.url || ""}" alt="${body.media[4]?.alt || ""}" class="object-cover max-w-24">
+                </div>
+            </div>
+            <div class="box flex flex-col p-4 gap-4 col-span-12 md:col-span-5">
+                <div class="header-1">
+                    ${body.title}
+                </div>
+                <div>
+                    <ul class="flex flex-row flex-wrap whitespace-nowrap gap-2">
+                        ${tags}
+                    </ul>
+                </div>
+                <div class="flex flex-row justify-between items-center content-between ">
+                    <div class="border flex flex-col gap-8 rounded border-gray-200 bg-gray-100 shadow-sm p-2 w-full">
+                        <div class="flex flex-row justify-between">
+                            <div>
+                                <p id="BidContent">Current Bid</p>
+                                <p class="font-bold text-primary">💰${maxBid}</p>
+                                <p>${bidText}</p>
                             </div>
-                            <div class="${isBidActive && !isUserListingAuthor ? "" : "hidden"} flex flex-col items-center">
-                                <div>
-                                    <h2 class="text-primary font-medium">Your Bid (Higher than ${maxBid})</h2>
-                                </div>
-                                <div class=" flex flex-row p-2 group/inputfield">
-                                    <input type="number" id="bidValue" min="${maxBid}" value="${maxBid + 1}" class="p-2 min-h-[72px] m-0 invalid:border-red-500 group-hover/inputfield:invalid:border-red-400 border-2 rounded-s-lg peer">
-                                    <button dir="rtl"
-                                        id="bidButton" class="button bg-primary peer-invalid:bg-red-500 group-hover/inputfield:peer-invalid:bg-red-400 group-hover/inputfield:bg-primary/90 rounded-s-lg py-2 font-bold text-white w-32 min-h-[72px] m-0">Place
-                                        Bid</button>
-                                </div>
-                                <div id="bidError" class="hidden text-red-500 text-sm"></div>
+                            <div>
+                                <p>${endsAtString}</p>
+                            </div>
+                        </div>
+                        <div class="${isBidActive && !isUserListingAuthor ? "" : "hidden"} flex flex-col items-center">
+                            <div>
+                                <h2 class="text-primary font-medium">Your Bid (Higher than ${maxBid})</h2>
+                            </div>
+                            <div class=" flex flex-row p-2 group/inputfield">
+                                <input type="number" id="bidValue" min="${maxBid}" value="${maxBid + 1}" class="p-2 min-h-[72px] m-0 invalid:border-red-500 group-hover/inputfield:invalid:border-red-400 border-2 rounded-s-lg peer">
+                                <button dir="rtl"
+                                    id="bidButton" class="button bg-primary peer-invalid:bg-red-500 group-hover/inputfield:peer-invalid:bg-red-400 group-hover/inputfield:bg-primary/90 rounded-s-lg py-2 font-bold text-white w-32 min-h-[72px] m-0">Place
+                                    Bid</button>
+                            </div>
+                            <div id="bidError" class="hidden text-red-500 text-sm"></div>
                             </div>
                         </div>
                     </div>
                     <div>
                         <div class="flex flex-row gap-2 items-center">
                             <img class="w-8 h-8 rounded-full" src="${body.seller.avatar.url}" alt="${body.seller.avatar.alt}">
-                            <div class="flex flex-col">
-                                <p>Listed by: </p>
-                                <a href="profile.html?id=${body.seller?.name}" class="font-medium text-primary">${body.seller?.name}</a>
-                            </div>
+                        <div class="flex flex-col">
+                            <p>Listed by: </p>
+                            <a href="profile.html?id=${body.seller?.name}" class="font-medium text-primary">${body.seller?.name}</a>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
             <div class="flex justify-between w-full">
