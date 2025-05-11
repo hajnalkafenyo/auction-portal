@@ -6,13 +6,14 @@ async function fetchListing() {
 
     const listingContentElement = document.getElementById('listingContent');
     const breadcrumbElement = document.getElementById('breadcrumb');
-    const editListingButtons = document.querySelectorAll(".edit-listing-button");
-    const listingForm = document.querySelector(".edit-listing-form");
 
     listinghtml = listingContent(body.data);
     breadcrumbHtml = getBreadcrumb(body.data);
     document.title = `BookBid | ${body.data.title}`
     listingContentElement.innerHTML = listinghtml;
+
+    const editListingButtons = document.querySelectorAll(".edit-listing-button");
+    const listingForm = document.querySelector(".edit-listing-form");
     breadcrumbElement.innerHTML = breadcrumbHtml;
     listingForm.addEventListener("submit", async (e) => {
         e.preventDefault();
